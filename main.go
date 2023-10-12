@@ -44,6 +44,8 @@ func main() {
 
 	upload_app, err := upload(ios_app, APP_UPLOAD_ENDPOINT, username, access_key)
 
+	log.Print(upload_app)
+
 	if err != nil {
 		failf(err.Error())
 	}
@@ -53,6 +55,8 @@ func main() {
 	if upload_app_parsed_response["app_url"] == "" {
 		failf(err.Error())
 	}
+
+	log.Print(upload_app_parsed_response["app_url"])
 
 	log.Print("Successfully uploaded the app")
 
