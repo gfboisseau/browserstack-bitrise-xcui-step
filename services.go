@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
@@ -39,15 +38,15 @@ func build(app_url string, test_suite_url string, username string, access_key st
 	res, err := client.Do(req)
 
 	if err != nil {
-		return "", errors.New(fmt.Sprintf(HTTP_ERROR, err))
+		return "", fmt.Errorf(HTTP_ERROR, err)
 	}
 
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 
 	if err != nil {
-		return "", errors.New(fmt.Sprintf(HTTP_ERROR, err))
+		return "", fmt.Errorf(HTTP_ERROR, err)
 	}
 
 	return string(body), nil
@@ -100,15 +99,15 @@ func upload(app_path string, endpoint string, username string, access_key string
 	res, err := client.Do(req)
 
 	if err != nil {
-		return "", errors.New(fmt.Sprintf(HTTP_ERROR, err))
+		return "", fmt.Errorf(HTTP_ERROR, err)
 	}
 
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 
 	if err != nil {
-		return "", errors.New(fmt.Sprintf(HTTP_ERROR, err))
+		return "", fmt.Errorf(HTTP_ERROR, err)
 	}
 
 	return string(body), nil
@@ -116,7 +115,7 @@ func upload(app_path string, endpoint string, username string, access_key string
 
 func checkBuildStatus(build_id string, username string, access_key string, waitForBuild bool) (string, error) {
 	if build_id == "" {
-		return "", errors.New(fmt.Sprintf(FETCH_BUILD_STATUS_ERROR, "invalid build_id"))
+		return "", fmt.Errorf(FETCH_BUILD_STATUS_ERROR, "invalid build_id")
 	}
 
 	if waitForBuild {
@@ -147,28 +146,28 @@ func checkBuildStatus(build_id string, username string, access_key string, waitF
 		res, err := client.Do(req)
 
 		if err != nil {
-			build_status_error = errors.New(fmt.Sprintf(HTTP_ERROR, err))
+			build_status_error = fmt.Errorf(HTTP_ERROR, err)
 			return
 		}
 
 		defer res.Body.Close()
 
-		body, err = ioutil.ReadAll(res.Body)
+		body, err = io.ReadAll(res.Body)
 
 		if err != nil {
-			build_status_error = errors.New(fmt.Sprintf(HTTP_ERROR, err))
+			build_status_error = fmt.Errorf(HTTP_ERROR, err)
 			return
 		}
 
 		unmarshal_err := json.Unmarshal([]byte(body), &build_parsed_response)
 
 		if unmarshal_err != nil {
-			build_status_error = errors.New(fmt.Sprintf(HTTP_ERROR, err))
+			build_status_error = fmt.Errorf(HTTP_ERROR, err)
 			return
 		}
 
 		if build_parsed_response["error"] != nil && build_parsed_response["error"] != "" {
-			build_status_error = errors.New(fmt.Sprintf(FETCH_BUILD_STATUS_ERROR, build_parsed_response["error"]))
+			build_status_error = fmt.Errorf(FETCH_BUILD_STATUS_ERROR, build_parsed_response["error"])
 			return
 		}
 

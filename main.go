@@ -64,7 +64,7 @@ func main() {
 
 	upload_test_suite, err := upload(test_runner_app, TEST_SUITE_UPLOAD_ENDPOINT, username, access_key)
 
-	log.Print(upload_test_suite)
+	log.Print("Upload test suite -> ", upload_test_suite)
 
 	if err != nil {
 		failf(err.Error())
@@ -72,7 +72,7 @@ func main() {
 
 	test_suite_upload_parsed_response := jsonParse(upload_test_suite)
 
-	log.Print(test_suite_upload_parsed_response)
+	log.Print("Test suite upload parsed response -> ", test_suite_upload_parsed_response)
 
 	if test_suite_upload_parsed_response["test_suite_url"] == "" {
 		failf(err.Error())
@@ -82,8 +82,6 @@ func main() {
 
 	test_suite_url := test_suite_upload_parsed_response["test_suite_url"].(string)
 
-	log.Print(test_suite_url)
-
 	build_response, err := build(app_url, test_suite_url, username, access_key)
 
 	if err != nil {
@@ -92,7 +90,7 @@ func main() {
 
 	build_parsed_response := jsonParse(build_response)
 
-	log.Print(build_parsed_response)
+	log.Print("Build parsed response -> ", build_parsed_response)
 
 	if build_parsed_response["message"] != "Success" {
 		failf(BUILD_FAILED_ERROR, build_parsed_response["message"])
