@@ -80,6 +80,8 @@ func main() {
 
 	test_suite_url := test_suite_upload_parsed_response["test_suite_url"].(string)
 
+	log.Print(test_suite_url)
+
 	build_response, err := build(app_url, test_suite_url, username, access_key)
 
 	if err != nil {
