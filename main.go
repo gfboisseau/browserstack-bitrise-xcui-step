@@ -56,8 +56,6 @@ func main() {
 		failf(err.Error())
 	}
 
-	log.Print(upload_app_parsed_response["app_url"])
-
 	log.Print("Successfully uploaded the app")
 
 	app_url := upload_app_parsed_response["app_url"].(string)
@@ -66,11 +64,15 @@ func main() {
 
 	upload_test_suite, err := upload(test_runner_app, TEST_SUITE_UPLOAD_ENDPOINT, username, access_key)
 
+	log.Print(upload_test_suite)
+
 	if err != nil {
 		failf(err.Error())
 	}
 
 	test_suite_upload_parsed_response := jsonParse(upload_test_suite)
+
+	log.Print(test_suite_upload_parsed_response)
 
 	if test_suite_upload_parsed_response["test_suite_url"] == "" {
 		failf(err.Error())
@@ -89,6 +91,8 @@ func main() {
 	}
 
 	build_parsed_response := jsonParse(build_response)
+
+	log.Print(build_parsed_response)
 
 	if build_parsed_response["message"] != "Success" {
 		failf(BUILD_FAILED_ERROR, build_parsed_response["message"])

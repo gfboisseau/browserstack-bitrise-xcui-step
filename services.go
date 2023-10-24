@@ -27,7 +27,7 @@ func build(app_url string, test_suite_url string, username string, access_key st
 
 	final_payload := appendExtraCapabilities(string(payload))
 
-	// log.Print("Final payload -> ", string(final_payload))
+	log.Print("Final payload -> ", string(final_payload))
 
 	client := &http.Client{}
 	req, _ := http.NewRequest("POST", BROWSERSTACK_DOMAIN+APP_AUTOMATE_BUILD_ENDPOINT, bytes.NewBuffer(final_payload))
